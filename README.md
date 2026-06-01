@@ -40,19 +40,103 @@ The system decouples web-routing interfaces from computational machine learning 
 ## 📁 Project Directory Structure
 
 ```text
-RAG/
+intelligent_document_analyzer/
 ├── app/
+│   ├── __init__.py            # Empty file to initialize the package
+│   ├── main.py                 # FastAPI application & endpoints
 │   ├── OCR/
-│   │   ├── __init__.py
-│   │   └── text_extractor.py    # Dual digital/OCR parsing logic
-│   ├── models/
-│   │   ├── __init__.py
-│   │   └── schemas.py           # Pydantic input/output schemas
+│   │   ├── __init__.py        # Empty file
+│   │   └── text_extractor.py   # PDF text layer & Tesseract OCR engine
 │   ├── vector_store/
-│   │   ├── __init__.py
-│   │   └── rag_service.py       # Text splitting and local FAISS logic
-│   └── main.py                  # Core FastAPI gateway routes
-├── documents/                   # Upload landing storage directory
-├── faiss_index/                 # Local binary database index files
-├── .env                         # Windows environment binary path maps
-└── requirements.txt             # Pinned project dependencies manifest
+│   │   ├── __init__.py        # Empty file
+│   │   └── rag_service.py      # LangChain text splitter & FAISS database
+│   └── models/
+│       ├── __init__.py        # Empty file
+│       └── schemas.py          # Pydantic data validation models
+├── documents/                  # Folder where your uploaded PDFs will save
+├── faiss_index/                # Automatically generated when you upload a file
+├── .env                        # Stores your local Windows Tesseract path
+└── requirements.txt            # Package dependencies list
+🔐 1. The Secret Key File (.env)
+Your computer needs to know exactly where to look for certain applications installed on your hard drive. We keep this information inside a special, hidden text file named exactly .env (with a dot at the beginning and no file extensions at the end).
+
+This file must sit out in the open in your main RAG folder, right next to your requirements.txt.
+
+Copy and Paste .env Content:
+Ini, TOML
+# Tells our code exactly where to find Tesseract's eyes on your Windows profile
+TESSERACT_CMD=C:\Users\sreel\AppData\Local\Programs\Tesseract-OCR\tesseract.exe
+
+# Sets up the home address on your laptop where the dashboard web page will build
+HOST=127.0.0.1
+PORT=8000
+
+# Names the specific open-source AI brain model we use to understand sentences
+EMBEDDING_MODEL_NAME=all-MiniLM-L6-v2
+Why does this file matter?
+TESSERACT_CMD: If this path is wrong, your project can't find its visual OCR engine. It will read digital PDFs perfectly, but the second you upload a raw smartphone photograph or a screenshot, it will lose its sight and throw an error.
+
+HOST & PORT: This defines the exact offline digital neighborhood your web link uses. It is what allows you to type http://127.0.0.1:8000/docs into Chrome and see your beautiful dashboard.
+
+📂 2. Meeting the Team: What Every File Does
+Every folder and script inside your project has a distinct personality and a specific job to do. Here is a tour of your workspace:
+
+The Outer Safeguards (Root Directory)
+requirements.txt
+
+In Simple Terms: The Grocery List.
+
+Its Job: It lists all the third-party packages your computer needs to download (like FastAPI, PyMuPDF, and FAISS) so your Python code has the smart capabilities it needs to work.
+
+.env
+
+In Simple Terms: The Private Settings Card.
+
+Its Job: It keeps machine-specific paths separate from your actual programming code, ensuring your setup matches your laptop perfectly.
+
+The Brain Core (app/ Folder)
+app/main.py
+
+In Simple Terms: The Air Traffic Controller.
+
+Its Job: This is the main gatekeeper of your app. It creates the actual webpage endpoints, welcomes you when you visit the home link, and routes your file uploads and text queries to the correct sub-folders behind the scenes.
+
+The Security Check (app/models/ Folder)
+app/models/__init__.py
+
+In Simple Terms: The Package Label.
+
+Its Job: This is an empty file. Its only purpose is to tap Python on the shoulder and say, "Hey, this folder is a certified code bundle! You are allowed to look inside."
+
+app/models/schemas.py
+
+In Simple Terms: The Form Screener.
+
+Its Job: It double-checks data formats. For example, if you ask a question, it makes sure you typed real words for your question and a real number for how many answers you want back. If you make a typo, it intercepts the mistake before it breaks your core database.
+
+The Eyes (app/OCR/ Folder)
+app/OCR/text_extractor.py
+
+In Simple Terms: The Smart Document Reader.
+
+Its Job: When you upload a file, this script scans it. First, it uses PyMuPDF to quickly scrape text off digital PDFs. If it finds nothing (like in a flattened photo or screenshot), it calls Tesseract OCR to look at the pixels, decipher the shapes of letters, and transcribe them into text your code can read.
+
+The AI Thinker (app/vector_store/ Folder)
+app/vector_store/rag_service.py
+
+In Simple Terms: The Library Cataloger.
+
+Its Job: This is where the AI magic lives. It uses LangChain to chop long text into neat paragraphs, calls HuggingFace to turn those sentences into mathematical meaning vectors, and sets up FAISS to instantly search through thousands of paragraph blocks to pull out the precise answer to your question.
+
+The Memory Banks (Automated Storage Folders)
+documents/
+
+In Simple Terms: The Processing Tray.
+
+Its Job: A local landing folder where the files you upload are held so your extraction scripts can safely open and read them.
+
+faiss_index/
+
+In Simple Terms: The Permanent Memory Bank.
+
+Its Job: This is where your FAISS database saves its work directly onto your hard drive. Because this folder saves binary data files, your project remembers all your documents even if you turn off your laptop, close VS Code, or restart your server!
